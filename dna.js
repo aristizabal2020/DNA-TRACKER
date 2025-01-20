@@ -16,21 +16,31 @@ client.once(Events.ClientReady, readyClient => {
 
 const updatePrice = async () => {
   try {
-    // Petición a la API
+    
+    // Request API
     const response = await axios.get(
       "https://api.geckoterminal.com/api/v2/networks/world-chain/tokens/0xed49fe44fd4249a09843c2ba4bba7e50beca7113"
     );
 
-    // fetching price DNA
-    const price = response.data.data.attributes.price_usd;
+    if (response) {
 
-    if (price) {
-      // update status
-      client.user.setPresence({ activities: [{ name: `$${price} USD` }]});
+      // fetching price DNA
+      const price = response.data.data.attributes.price_usd;
+  
+      if (price) {
+        // update status
+        client.user.setPresence({ activities: [{ name: `$${price} USD` }]});
+        
+      } else {
+        console.warn("Price not available.");
+      }
       
     } else {
-      console.warn("Price not available.");
+
+      client.user.setPresence({ activities: [{ name: 'Error fetching price...' }], status: 'online' });
+
     }
+
   } catch (error) {
     console.error("Error updating price:", error.message);
   }
