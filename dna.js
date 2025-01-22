@@ -1,6 +1,6 @@
 require('dotenv').config();
 const axios = require('axios');
-const { Client, GatewayIntentBits, Events } = require("discord.js");
+const { Client, GatewayIntentBits, Events, ActivityType } = require("discord.js");
 
 const client = new Client({
   intents: [
@@ -11,7 +11,7 @@ const client = new Client({
 client.once(Events.ClientReady, readyClient => {
   console.log(`Connected as ${readyClient.user.tag}`);
   console.log(`Connected in ${readyClient.guilds.cache.size} Guild(s)`);
-  readyClient.user.setPresence({ activities: [{ name: 'Updating price...' }], status: 'online' });
+  readyClient.user.setPresence({ activities: [{ name: 'Updating price...', type: ActivityType.Custom  }], status: 'online' });
 });
 
 const updatePrice = async () => {
@@ -29,7 +29,7 @@ const updatePrice = async () => {
   
       if (price) {
         // update status
-        client.user.setPresence({ activities: [{ name: `$${price} USD` }]});
+        client.user.setPresence({ activities: [{ name: `PRICE $${price} USD`, type: ActivityType.Custom  }], status: 'online' });
         
       } else {
         console.warn("Price not available.");
